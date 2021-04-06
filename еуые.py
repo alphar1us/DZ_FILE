@@ -32,7 +32,10 @@ with open('рецепт.txt') as f:
     # запуск, >1 рецепта
     while i == 0:
         read_cookbook()
-pprint(cookbook)
+# pprint(cookbook)
+#
+
+
 
 def get_shop_list_by_dishes(dishes, person_count):
     test = list()
@@ -60,9 +63,6 @@ def get_shop_list_by_dishes(dishes, person_count):
     pprint(test2)
 
 get_shop_list_by_dishes(['Запеченный картофель', 'Омлет'], 2)
-
-
-
 
 
 
