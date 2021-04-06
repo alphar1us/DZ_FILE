@@ -59,9 +59,30 @@ def get_shop_list_by_dishes(dishes, person_count):
                 test2[name_dishes] = element
     pprint(test2)
 
+# задание 2
 get_shop_list_by_dishes(['Запеченный картофель', 'Омлет'], 2)
 
+#  задание 3
+list_file = ['1.txt', '2.txt', '3.txt']
 
+test = dict()
+test2 = dict()
+for t in list_file:
+    with open(t, 'rt', encoding = 'utf-8') as f:
+        a = sum(1 for _ in f)
+    f.close()
+    with open(t, 'rt', encoding = 'utf-8') as f2:
+        b = f2.readlines()
+    # print(a)
+        my_String = ''.join(b)
+    test[t] = a
+    test2[t] = my_String
+# print(test)
+    with open("test666.txt", "w") as file:
+        for w in sorted(test, key=test.get, reverse=False):
+            tt = str(test[w])
+            ttt = test2[w]
+            file.write(w + '\n' + tt + '\n' + ttt + '\n')
 
 
 
