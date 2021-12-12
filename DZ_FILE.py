@@ -1,54 +1,39 @@
 from pprint import pprint
-from collections import Counter
+
 import os
 
-#задание 1
-file_path = os.path.join(os.getcwd(), 'recipes.txt')
-with open(file_path, encoding = 'utf-8' ) as f:
-    cook_book = {}
-    name_of_specific_dish = f.readline()
-
-    while name_of_specific_dish:
-        count_of_ingredient = int(f.readline())
-        final_variant_dish_description = []
-        dict_of_all_ingredients_of_one_dish = {}
-
-        for i in range(count_of_ingredient):
-            name_count_measure_of_one_ingredient = f.readline().split('|')
-            name = name_count_measure_of_one_ingredient[0]
-            quantity = name_count_measure_of_one_ingredient[1].strip()
-            measure = name_count_measure_of_one_ingredient[2].strip()
-
-            dct_name_quantity_measure = {'ingredient_name': name, 'quantity': quantity, 'measure': measure}
-            final_variant_dish_description.append(dct_name_quantity_measure)
-            dict_of_all_ingredients_of_one_dish[name_of_specific_dish.strip()] = final_variant_dish_description
-            cook_book.update(dict_of_all_ingredients_of_one_dish)
-
-        f.readline()
-        name_of_specific_dish = f.readline()
-#pprint(cook_book)
-
-#задание 2
-
-def shop_list(dishes, person = 1):
-    shop_dict = {}
-    ingr_list = []
+def get_shop_list_by_dishes(dishes, person_count):
+    ingredients = {}
     for dish in dishes:
-        if dish in cook_book.keys(): #проверить является ли он ключом в словаре cook_book и вернуть значение
-            for i in range(len(cook_book[dish])):
-                ingr_list.append(cook_book[dish][i])
-    key_ingr_list = ['measure', 'quantity']
-    for i in range(len(ingr_list)):
-        qty_msr = [ingr_list[i]['measure'], int(ingr_list[i]['quantity'])*person]
-        ingr_name = ingr_list[i]['ingredient_name']
-        qty_msr_dict = dict(zip(key_ingr_list, qty_msr))
-        ingr_qty_msr_dict = {ingr_name : qty_msr_dict}
-        shop_dict.update(ingr_qty_msr_dict)
-    pprint(shop_dict)
+        for ingredient in cook_book[dish]:
+            if ingredient["ingredient_name"] not in list(ingredients.keys()):
+                print(list(ingredients.keys()))
+                ingredients[ingredient["ingredient_name"]] = {"measure": ingredient["measure"],
+                                                              "quantity": int(ingredient['quantity']) * person_count}
+            else:
+                print(f'ing={ingredient["ingredient_name"]}')
+                ingredients[ingredient["ingredient_name"]]["quantity"] += int(ingredient['quantity']) * person_count
+    return ingredients
 
-print()
 
-shop_list(['Омлет', 'Омлет'], 2)
+with open("recipes.txt", "r", encoding="utf8") as f:
+    cook_book = {}
+    prev_line = ""
+    for counter, line in enumerate(f):
+        if counter == 0 or prev_line == "\n":
+            cur_recipe = line[:-1]
+            cook_book[cur_recipe] = []
+        ingredient = line.split(" | ")
+        if len(ingredient) > 1:
+            cook_book[cur_recipe].append(
+                {"ingredient_name": ingredient[0], "quantity": ingredient[1], "measure": ingredient[2][:-1]})
+        prev_line = line
+for cook, ingredients in cook_book.items():
+    print(cook)
+    for ingredient in ingredients:
+        print(ingredient)
+
+pprint(get_shop_list_by_dishes(['Омлет','Омлет'], 1))
 
 
 
